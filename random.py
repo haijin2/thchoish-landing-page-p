@@ -1,1 +1,0 @@
-# Padelete na lang 
