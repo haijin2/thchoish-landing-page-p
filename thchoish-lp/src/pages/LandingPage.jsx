@@ -1,9 +1,4 @@
-// Hi, Licelle!. Note that the spacing utilities are generally the same as the prototype and you may focus on the actual design.
-
-/// Feel free to add new React components and props. Here's the docunentation I used: https://react.dev/blog/2023/03/16/introducing-react-dev
 import React, { useEffect, useState } from "react"; 
-
-
 
 
 import ALMV from '../assets/ALMV.png';
@@ -15,7 +10,6 @@ import vhillyImg from '../assets/vhilly.png';
 
 import { motion, useAnimation } from "framer-motion";
 import { useInView } from "react-intersection-observer";
-import { desc, mark } from "framer-motion/m";
 
 // Lines 9 to 34 control the animation wrapper. Nothing to adjust here unless you wish :) 
 const FadeInSection = ({ children, offset = 40, delay = 0 }) => {
