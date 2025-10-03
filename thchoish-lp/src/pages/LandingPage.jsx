@@ -1,12 +1,11 @@
-import React, { useEffect, useState } from "react"; 
-
+import React, { useEffect, useState } from "react";
+import emailjs from "@emailjs/browser";
 
 import ALMV from '../assets/ALMV.png';
 import angelaImg from '../assets/angela.png';
 import licelleImg from '../assets/licelle.jpg';
 import markImg from '../assets/mark.jpeg';
 import vhillyImg from '../assets/vhilly.png'; 
-
 
 import { motion, useAnimation } from "framer-motion";
 import { useInView } from "react-intersection-observer";
@@ -37,6 +36,139 @@ const FadeInSection = ({ children, offset = 40, delay = 0 }) => {
     </motion.div>
   );
 };
+
+// ------------------ SubscribeBlock (client -> EmailJS + optional backend POST) ------------------
+// This component will attempt to send an EmailJS email AND (if API_BASE is provided) POST the email to your backend.
+function SubscribeBlock() {
+  const [status, setStatus] = useState(null); // null | 'sending' | 'success' | 'error' | 'invalid'
+  const [sending, setSending] = useState(false);
+
+  // If REACT_APP_API_BASE is not provided, this will skip the backend POST.
+  const API_BASE = process.env.REACT_APP_API_BASE || '';
+
+  // EmailJS env vars
+  const SERVICE_ID = process.env.REACT_APP_EMAILJS_SERVICE_ID;
+  const TEMPLATE_ID = process.env.REACT_APP_EMAILJS_TEMPLATE_ID;
+  const PUBLIC_KEY = process.env.REACT_APP_EMAILJS_PUBLIC_KEY;
+
+  // Initialize EmailJS once if public key is present
+  useEffect(() => {
+    if (PUBLIC_KEY) {
+      try {
+        emailjs.init(PUBLIC_KEY);
+      } catch (err) {
+        // init can sometimes throw in weird environments; we'll still try send with the public key in send
+        console.warn('emailjs.init warning:', err);
+      }
+    }
+  }, [PUBLIC_KEY]);
+
+  async function onSubmit(e) {
+    e.preventDefault();
+    const email = e.target.email.value?.trim();
+    if (!email) return setStatus('invalid');
+
+    // Basic client-side validation
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!re.test(email)) return setStatus('invalid');
+
+    setStatus('sending');
+    setSending(true);
+
+    let emailjsSuccess = false;
+    let backendSuccess = false;
+
+    // Prepare template params for EmailJS (ensure your EmailJS template uses 'user_email')
+    const templateParams = {
+      user_email: email,
+      // add other template variables here if your template expects them, e.g. user_name
+    };
+
+    // 1) Try EmailJS (client-side)
+    try {
+      if (SERVICE_ID && TEMPLATE_ID) {
+        const res = await emailjs.send(SERVICE_ID, TEMPLATE_ID, templateParams, PUBLIC_KEY);
+        // EmailJS typical successful response has status 200
+        if (res?.status === 200) {
+          emailjsSuccess = true;
+        } else {
+          console.warn('EmailJS unexpected response:', res);
+        }
+      } else {
+        console.warn('EmailJS environment variables missing (SERVICE_ID/TEMPLATE_ID) — skipping EmailJS send.');
+      }
+    } catch (err) {
+      console.error('EmailJS send error:', err);
+    }
+
+    // 2) Try backend POST if API_BASE configured
+    try {
+      if (API_BASE) {
+        const res2 = await fetch(`${API_BASE}/api/subscribe`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email }),
+        });
+        if (res2.ok) {
+          backendSuccess = true;
+        } else {
+          const data = await res2.json().catch(() => ({}));
+          console.error('Backend subscribe error:', data);
+        }
+      } else {
+        // No backend configured — that's fine if EmailJS handled it.
+        console.info('No API_BASE provided — skipping backend POST.');
+      }
+    } catch (err) {
+      console.error('Backend POST error:', err);
+    }
+
+    setSending(false);
+
+    if (emailjsSuccess || backendSuccess) {
+      setStatus('success');
+      e.target.reset();
+    } else {
+      setStatus('error');
+    }
+  }
+
+  return (
+    <section id="subscribe" className="py-12 px-8 max-w-md mx-auto text-center">
+      <h2 className="text-5xl text-[#EC4F2F] font-semibold text-left mb-2 tracking-wide">
+        Stay Connected!
+      </h2>
+      <p className="text-gray-400 text-2xl text-left mb-6 leading-relaxed">
+        Join our research community to receive updates on ALMV developments.
+      </p>
+
+      <form onSubmit={onSubmit} className="flex max-w-md mx-auto">
+        <input
+          name="email"
+          type="email"
+          placeholder="Enter your email address"
+          required
+          className="flex-1 bg-[#1f1f1f]/80 border border-white/20 text-white placeholder-gray-400 px-4 py-3 rounded-l-xl shadow-inner focus:outline-none"
+        />
+        <button
+          type="submit"
+          disabled={sending}
+          className={"px-6 py-3 rounded-r-xl font-semibold text-white border border-white/20 " +
+            (sending ? 'opacity-60 cursor-wait bg-gray-600' : 'bg-gradient-to-r from-[#E04333]/80 to-[#6A2F67]/80')}
+        >
+          {sending ? 'Sending…' : 'Subscribe'}
+        </button>
+      </form>
+
+      <div className="mt-3">
+        {status === 'sending' && <span>Sending…</span>}
+        {status === 'success' && <span className="text-green-400">Thanks, you are subscribed to our update newsletter.</span>}
+        {status === 'error' && <span className="text-red-400">Something went wrong. Try again later.</span>}
+        {status === 'invalid' && <span className="text-yellow-400">Please enter a valid email.</span>}
+      </div>
+    </section>
+  );
+}
 
 export default function LandingPage() {
   const [scrolled, setScrolled] = useState(false);
@@ -126,7 +258,7 @@ export default function LandingPage() {
 
           {/* newly added */}
           <div className="inline-flex gap-4 mt-6">
-            {["✓ Metadata Extraction", "✓ Advanced Encryption", "✓ Invisible Embedding", "✓ Free & Privacy-Focused"].map((text, i) => (
+            {[("✓ Metadata Extraction"), ("✓ Advanced Encryption"), ("✓ Invisible Embedding"), ("✓ Free & Privacy-Focused")].map((text, i) => (
               <div
                 key={i}
                 className="relative px-4 py-5 rounded-lg font-xs text-gray-300
@@ -148,7 +280,7 @@ export default function LandingPage() {
 
 
 
-        
+
       {/* Focus Section */}
       <FadeInSection offset={40} delay={0.1}>
       <section id="features" className="mt-4 mb-4 bg-[#121212] py-10 px-8 max-w-6xl mx-auto rounded-lg"
@@ -313,61 +445,9 @@ export default function LandingPage() {
 
 
 
-
-      
-
-      {/* Subscribe Section */}
+      {/* Subscribe Section (replaced) */}
       <FadeInSection offset={20} delay={0.4}>
-        <section id="subscribe" className="py-12 px-8 max-w-md mx-auto text-center">
-          <h2 className="text-5xl text-[#EC4F2F] font-semibold text-left mb-2 tracking-wide">
-            Stay Connected!
-          </h2>
-          <p className="text-gray-400 text-2xl text-left mb-6 leading-relaxed">
-            Join our research community to receive updates on ALMV developments.
-          </p>
-          <form className="flex max-w-md mx-auto" onSubmit={(e) => e.preventDefault()}>
-            <input
-            type="email"
-            placeholder="Enter your email address"
-            className="
-              flex-1 
-              bg-[#1f1f1f]/80 
-              border border-white/20 
-              text-white 
-              placeholder-gray-400
-              px-4 py-3 
-              rounded-l-xl 
-              shadow-inner 
-              focus:outline-none 
-              focus:ring-2 
-              focus:ring-[#E04333]/70 
-              focus:border-[#E04333]/50 
-              transition-all duration-300
-            "
-          />
-          <button
-            type="submit"
-            className="
-              bg-gradient-to-r 
-              from-[#E04333]/80 
-              to-[#6A2F67]/80 
-              backdrop-blur-md 
-              px-6 py-3 
-              rounded-r-xl 
-              font-semibold 
-              text-white 
-              shadow-lg shadow-[#E04333]/30 
-              hover:shadow-xl 
-              hover:scale-105 
-              transition-all duration-300 
-              border border-white/20
-            "
-          >
-            Subscribe
-          </button>
-
-          </form>
-        </section>
+        <SubscribeBlock />
       </FadeInSection>
 
       {/* Footer */}
@@ -399,10 +479,10 @@ export default function LandingPage() {
     <div>
       <h4 className="font-semibold text-white mb-3">Resources</h4>
       <ul className="space-y-2 text-sm">
-        <li><a href="#" className="hover:text-red-500">Documentation</a></li>
-        <li><a href="#" className="hover:text-red-500">User Guide</a></li>
-        <li><a href="#" className="hover:text-red-500">API Reference</a></li>
-        <li><a href="#" className="hover:text-red-500">Support Center</a></li>
+        <li><a href="/documentation" className="hover:text-red-500">Documentation</a></li>
+        <li><a href="/user-guide" className="hover:text-red-500">User Guide</a></li>
+        <li><a href="/api-reference" className="hover:text-red-500">API Reference</a></li>
+        <li><a href="https://support.example.com" target="_blank" rel="noopener noreferrer" className="hover:text-red-500">Support Center</a></li>
       </ul>
     </div>
 
@@ -410,10 +490,10 @@ export default function LandingPage() {
     <div>
       <h4 className="font-semibold text-white mb-3">Research</h4>
       <ul className="space-y-2 text-sm">
-        <li><a href="#" className="hover:text-red-500">Thesis Paper</a></li>
-        <li><a href="#" className="hover:text-red-500">Algorithm Analysis</a></li>
-        <li><a href="#" className="hover:text-red-500">Security Audit</a></li>
-        <li><a href="#" className="hover:text-red-500">Performance Metrics</a></li>
+        <li><a href="/thesis" className="hover:text-red-500">Thesis Paper</a></li>
+        <li><a href="/algorithm-analysis" className="hover:text-red-500">Algorithm Analysis</a></li>
+        <li><a href="/security-audit" className="hover:text-red-500">Security Audit</a></li>
+        <li><a href="/metrics" className="hover:text-red-500">Performance Metrics</a></li>
       </ul>
     </div>
 
@@ -421,8 +501,8 @@ export default function LandingPage() {
     <div>
       <h4 className="font-semibold text-white mb-3">Legal</h4>
       <ul className="space-y-2 text-sm">
-        <li><a href="#" className="hover:text-red-500">License Agreement</a></li>
-        <li><a href="#" className="hover:text-red-500">Contact</a></li>
+        <li><a href="/license" className="hover:text-red-500">License Agreement</a></li>
+        <li><a href="/contact" className="hover:text-red-500">Contact</a></li>
       </ul>
     </div>
   </div>
@@ -431,8 +511,8 @@ export default function LandingPage() {
   <div className="max-w-7xl mx-auto mt-8 border-t border-gray-700 pt-4 text-xs text-gray-500 flex justify-between">
     <span>© {new Date().getFullYear()} ALMV. All rights reserved.</span>
     <div className="space-x-4">
-      <a href="#" className="hover:text-red-500">Terms</a>
-      <a href="#" className="hover:text-red-500">Privacy</a>
+      <a href="/terms" className="hover:text-red-500">Terms</a>
+      <a href="/privacy" className="hover:text-red-500">Privacy</a>
     </div>
   </div>
 </footer>
