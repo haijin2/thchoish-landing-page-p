@@ -209,7 +209,7 @@ export default function LandingPage() {
 
 
         <nav className="space-x-6 text-sm font-medium text-white">
-          <a href="#download" className="hover:text-red-500 transition-colors duration-300">Download</a>
+          <a href="https://github.com/haijin2/thchoish-landing-page/releases/tag/v1.0/almv_installer.exe" className="hover:text-red-500 transition-colors duration-300">Download</a>
           <a href="#features" className="hover:text-red-500 transition-colors duration-300">Features</a>
           <a href="#workflow" className="hover:text-red-500 transition-colors duration-300">Learn How it Works</a>
           <a href="#team" className="hover:text-red-500 transition-colors duration-300">Team</a>
