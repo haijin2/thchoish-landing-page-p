@@ -278,67 +278,6 @@ export default function LandingPage() {
         </section>
       </FadeInSection>
 
-
-
-
-      {/*
-{/* Focus Section */} 
-<FadeInSection offset={40} delay={0.1}>
-  <section
-    id="features"
-    className="mt-4 mb-4 bg-[#121212] py-10 px-8 max-w-6xl mx-auto rounded-lg"
-  >
-    <h2 className="text-5xl font-semibold text-left mb-3 tracking-wide text-[#EC4F2F]">
-      Focus on taking and sending photos.
-    </h2>
-
-    <p className="text-2xl text-gray-200 mb-6">
-      ALMV will take care of the rest.
-    </p>
-
-    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-      {[
-        {
-          title: "AES-256 Encryption",
-          desc: "Protects extracted metadata using Advanced Encryption Standard for maximum confidentiality.",
-        },
-        {
-          title: "Entropy-Based Region Detection",
-          desc: "Identifies the busiest image areas using Shannon entropy for optimal data hiding.",
-        },
-        {
-          title: "RSA-OAEP Key Exchange",
-          desc: "Secures encryption keys with Optimal Asymmetric Encryption Padding.",
-        },
-        {
-          title: "LSB Steganography Embedding",
-          desc: "Conceals encrypted metadata in image pixels without altering visual quality.",
-        },
-        {
-          title: "Argon2 Password Hashing",
-          desc: "Strengthens user passwords against brute force and dictionary attacks.",
-        },
-        {
-          title: "PSNR & SSIM Quality Metrics",
-          desc: "Ensures stego-images maintain high visual fidelity after embedding.",
-        },
-      ].map((item, i) => (
-        <div
-          key={i}
-          className="relative bg-[#1f1f1f] p-6 rounded-lg border text-gray-300
-                     before:absolute before:inset-[-1px] before:rounded-lg before:bg-gradient-to-r before:from-[#E04333] before:to-[#6A2F67] before:-z-10
-                     shadow-md"
-        >
-          <h3 className="font-semibold text-[#EC4F2F] mb-2 text-lg">{item.title}</h3>
-          <p className="text-gray-400 text-sm leading-relaxed">{item.desc}</p>
-        </div>
-      ))}
-    </div>
-  </section>
-</FadeInSection> */
-
-
-
             {/* Workflow Section */}
             <FadeInSection offset={40} delay={0.2}>
               <section id="workflow" className="py-16 px-6 max-w-6xl mx-auto">
