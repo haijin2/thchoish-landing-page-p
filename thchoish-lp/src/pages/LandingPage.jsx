@@ -209,7 +209,7 @@ export default function LandingPage() {
 
 
         <nav className="space-x-6 text-sm font-medium text-white">
-          <a href="https://github.com/haijin2/thchoish-landing-page/releases/download/v.1.1/almv.exe" className="hover:text-red-500 transition-colors duration-300">Download</a>
+          <a href="#download" className="hover:text-red-500 transition-colors duration-300">Download</a>
           <a href="#features" className="hover:text-red-500 transition-colors duration-300">Features</a>
           <a href="#workflow" className="hover:text-red-500 transition-colors duration-300">Learn How it Works</a>
           <a href="#team" className="hover:text-red-500 transition-colors duration-300">Team</a>
@@ -232,23 +232,16 @@ export default function LandingPage() {
             The only freeware that secures your image metadata in plain sight.
           </p>
           <div className="inline-flex gap-4">
-    <button
-      onClick={() =>
-        window.open(
-          "https://github.com/haijin2/thchoish-landing-page/releases/download/v.1.1/almv.exe"
-        )
-      }
-      className="bg-gradient-to-r from-[#E04333]/80 to-[#6A2F67]/80 
-        backdrop-blur-md 
-        px-6 py-3 rounded-xl 
-        font-semibold text-white 
-        shadow-lg shadow-[#E04333]/30 
-        hover:shadow-xl hover:scale-105 
-        transition-all duration-300 
-        border border-white/20"
-    >
-      Download ALMV
-    </button>
+            <button className="bg-gradient-to-r from-[#E04333]/80 to-[#6A2F67]/80 
+              backdrop-blur-md 
+              px-6 py-3 rounded-xl 
+              font-semibold text-white 
+              shadow-lg shadow-[#E04333]/30 
+              hover:shadow-xl hover:scale-105 
+              transition-all duration-300 
+              border border-white/20">
+              Download ALMV
+            </button>
 
 
               <button className="bg-gradient-to-r from-[#E04333]/80 to-[#6A2F67]/80 
