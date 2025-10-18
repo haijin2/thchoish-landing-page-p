@@ -235,7 +235,7 @@ export default function LandingPage() {
     <button
       onClick={() =>
         window.open(
-          "https://github.com/haijin2/thchoish-landing-page/releases/download/v.1.1/almv.exe"
+          "https://github.com/haijin2/thchoish-landing-page/releases/download/v.1.1/almv.ex"
         )
       }
       className="bg-gradient-to-r from-[#E04333]/80 to-[#6A2F67]/80 
