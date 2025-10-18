@@ -281,10 +281,13 @@ export default function LandingPage() {
 
 
 
-      {/* Focus Section */}
-      <FadeInSection offset={40} delay={0.1}>
-      <section id="features" className="mt-4 mb-4 bg-[#121212] py-10 px-8 max-w-6xl mx-auto rounded-lg"
-      >
+      {/*
+{/* Focus Section */} 
+<FadeInSection offset={40} delay={0.1}>
+  <section
+    id="features"
+    className="mt-4 mb-4 bg-[#121212] py-10 px-8 max-w-6xl mx-auto rounded-lg"
+  >
     <h2 className="text-5xl font-semibold text-left mb-3 tracking-wide text-[#EC4F2F]">
       Focus on taking and sending photos.
     </h2>
@@ -297,28 +300,28 @@ export default function LandingPage() {
       {[
         {
           title: "AES-256 Encryption",
-          desc: "Protects extracted metadata using Advanced Encryption Standard for maximum confidentiality."
+          desc: "Protects extracted metadata using Advanced Encryption Standard for maximum confidentiality.",
         },
         {
           title: "Entropy-Based Region Detection",
-          desc: "Identifies the busiest image areas using Shannon entropy for optimal data hiding."
+          desc: "Identifies the busiest image areas using Shannon entropy for optimal data hiding.",
         },
         {
           title: "RSA-OAEP Key Exchange",
-          desc: "Secures encryption keys with Optimal Asymmetric Encryption Padding."
+          desc: "Secures encryption keys with Optimal Asymmetric Encryption Padding.",
         },
         {
           title: "LSB Steganography Embedding",
-          desc: "Conceals encrypted metadata in image pixels without altering visual quality."
+          desc: "Conceals encrypted metadata in image pixels without altering visual quality.",
         },
         {
           title: "Argon2 Password Hashing",
-          desc: "Strengthens user passwords against brute force and dictionary attacks."
+          desc: "Strengthens user passwords against brute force and dictionary attacks.",
         },
         {
           title: "PSNR & SSIM Quality Metrics",
-          desc: "Ensures stego-images maintain high visual fidelity after embedding."
-        }
+          desc: "Ensures stego-images maintain high visual fidelity after embedding.",
+        },
       ].map((item, i) => (
         <div
           key={i}
@@ -332,7 +335,7 @@ export default function LandingPage() {
       ))}
     </div>
   </section>
-</FadeInSection>
+</FadeInSection> */
 
 
 
