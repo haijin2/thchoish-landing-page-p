@@ -209,7 +209,7 @@ export default function LandingPage() {
 
 
         <nav className="space-x-6 text-sm font-medium text-white">
-          <a href="#download" className="hover:text-red-500 transition-colors duration-300">Download</a>
+          <a href="https://github.com/haijin2/thchoish-landing-page/releases/download/v.1.1/almv.exe" className="hover:text-red-500 transition-colors duration-300">Download</a>
           <a href="#features" className="hover:text-red-500 transition-colors duration-300">Features</a>
           <a href="#workflow" className="hover:text-red-500 transition-colors duration-300">Learn How it Works</a>
           <a href="#team" className="hover:text-red-500 transition-colors duration-300">Team</a>
@@ -232,6 +232,7 @@ export default function LandingPage() {
             The only freeware that secures your image metadata in plain sight.
           </p>
           <div className="inline-flex gap-4">
+          <a href="https://github.com/haijin2/thchoish-landing-page/releases/download/v.1.1/almv.exe" download>
             <button className="bg-gradient-to-r from-[#E04333]/80 to-[#6A2F67]/80 
               backdrop-blur-md 
               px-6 py-3 rounded-xl 
@@ -242,6 +243,7 @@ export default function LandingPage() {
               border border-white/20">
               Download ALMV
             </button>
+          </a>
 
 
               <button className="bg-gradient-to-r from-[#E04333]/80 to-[#6A2F67]/80 
